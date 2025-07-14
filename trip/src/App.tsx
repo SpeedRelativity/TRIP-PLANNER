@@ -1,26 +1,20 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
+import { Button } from "@/components/ui/button"
 
 function App() {
+  const [count, setCount] = useState(0)
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Plan Trip Itinenary with Friends Project</h1>
+      <h2>Created using React + Typescript + Firebase + OpenAI</h2>
+      <h2> - Nechar KC</h2>
+      <Button>Click</Button>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
