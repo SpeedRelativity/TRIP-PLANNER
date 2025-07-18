@@ -2,6 +2,8 @@ import { Card } from "./components/ui/card"
 import {Button} from "./components/ui/button"
 import Autocomplete from "react-google-autocomplete"
 
+const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY
+
 import { useState } from "react"
 const Home = () => {
 
@@ -24,7 +26,7 @@ const Home = () => {
         <Card className=" w-[60vw] p-2">
             <div className="flex space-x-2">
                 
-                <Autocomplete className="w-full" apiKey="AIzaSyAlv0uG9nKdQ13AmSQOlHkV2b2RgH4xY_w" onPlaceSelected={(place) => {console.log(place)}}/>
+                <Autocomplete className="w-full" apiKey={API_KEY} onPlaceSelected={(place) => {console.log(place)}}/>
                 <Button onClick={() => handleFrameChange("selectionPage")}>Go</Button>
 
             </div>
@@ -40,7 +42,7 @@ const Home = () => {
         <h1 className="text-5xl px-4 pb-4 whitespace-nowrap">go back?</h1>
         <Card className=" w-[60vw] p-2">
             <div className="flex space-x-2">
-                <Autocomplete className="w-full" apiKey="AIzaSyAlv0uG9nKdQ13AmSQOlHkV2b2RgH4xY_w" onPlaceSelected={(place) => {console.log(place)}}/>
+                <Autocomplete className="w-full" apiKey={API_KEY} onPlaceSelected={(place) => {console.log(place)}}/>
                 <Button onClick={() => handleFrameChange("main")}>Go Back</Button>
             </div>
         </Card>
