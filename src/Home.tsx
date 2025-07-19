@@ -12,7 +12,7 @@ const Home = () => {
   const [place, setPlace] = useState(null)
   const [frame, setFrame] = useState("main")
   const [prompt, setPrompt] = useState("")
-  const [itinerary, setItinerary] = useState("")
+  const [itinerary, setItinerary] = useState<any>(null)
 
   const handlePlaceSelect = (selectPlace: any) => {
     setPlace(selectPlace)
@@ -23,11 +23,11 @@ const Home = () => {
   }
 
   const returnCards = () => {
-    if (!itinerary || !itinerary.title) return null
+    if (!itinerary || !itinerary.Title) return null
 
     return (
       <Card className="w-full min-h-[150px] p-4">
-        <h1 className="text-2xl">{itinerary.title}</h1>
+        <h1 className="text-2xl">{itinerary.Title}</h1>
       </Card>
 )
 
@@ -63,13 +63,15 @@ const Home = () => {
                  <Input value={prompt} onChange={(e) => setPrompt(e.target.value)} className="w-full" />
                 <Button onClick={async () => {
                   console.log({prompt})
-                   const result = await generateItinerary(prompt)
-                   setItinerary(JSON.parse(result))
-                   console.log(result) }}>Go</Button>
+                  const result = await generateItinerary(prompt)
+                  console.log(result)
+                  setItinerary(JSON.parse(result))}}>Go</Button>
             </div>
         </Card>
         <div className="w-full h-full flex flex-col justify-around p-24">
-          {returnCards()}
+            {returnCards()}
+
+          
         </div>
         
         </div>

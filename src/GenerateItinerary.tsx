@@ -16,7 +16,7 @@ const generateItinerary = async (prompt: string) => {
         
           {
           role: "system",
-          content: "You are a travel assistant. ONLY respond with a valid JSON object. Do not include any explanation or formatting. Start and end with `{}` only."
+          content: "You are a travel assistant. ONLY respond with a valid JSON object. Do not include any explanation or formatting. Start and end with `{}` only. Include a Title"
         },
         {
           role: "user",
