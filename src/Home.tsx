@@ -11,7 +11,7 @@ const Home = () => {
 
   const [place, setPlace] = useState(null)
   const [frame, setFrame] = useState("main")
-  const [prompt, setPrompt] = useState("")
+  const [prompt, setPrompt] = useState("3 day trip to Japan")
   const [itinerary, setItinerary] = useState<any>(null)
 
   const handlePlaceSelect = (selectPlace: any) => {
@@ -29,7 +29,8 @@ const Home = () => {
       <>
         <h1>{itinerary.Title}</h1>
         <Card className="w-full min-h-[150px] p-4">
-          <h1 className="text-2xl">{itinerary.Description}</h1>
+          <h1 className="text-2xl">{itinerary.Days[0].Title}</h1>
+          <p>{itinerary.Days[0].Description}</p>
         </Card>
       </>
       
@@ -49,11 +50,13 @@ const Home = () => {
                   console.log("success")
                  }} placeholder="3 day trip to Japan..." className="w-full" />
                 {/*<Autocomplete className="w-full" apiKey={API_KEY} onPlaceSelected={(place) => {console.log(place)}}/>*/}
-                <Button onClick={() => handleFrameChange("selectionPage")}>Go</Button>
-
+                <Button onClick={async () => {
+                  handleFrameChange("selectionPage")
+                  console.log({prompt})
+                  const result = await generateItinerary(prompt)
+                  console.log(result)
+                  setItinerary(JSON.parse(result))}}>Go</Button>
             </div>
-            
-            
         </Card>
     </div>
     )

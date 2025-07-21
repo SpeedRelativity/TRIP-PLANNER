@@ -13,10 +13,27 @@ const generateItinerary = async (prompt: string) => {
     body: JSON.stringify({
       model: "llama-3.3-70b-versatile",
       messages: [
-        
-          {
+        {
           role: "system",
-          content: "You are a travel assistant. ONLY respond with a valid JSON object. Do not include any explanation or formatting. Start and end with `{}` only. Include a Title, Description, places to visit"
+          content: `You are a travel assistant. ONLY respond with a valid JSON object. Do not include any explanation or formatting. Respond in the following strict format:
+
+      {
+        "Title": "Short rephrased version of the user's prompt",
+        "Days": [
+          {
+            "Day": "Day 1",
+            "Destinations": ["Shibuya", "Shinjuku", "Akihabara", "etc"],
+            "MainAttractions": {
+              "Shibuya": "Brief description of key attraction(s) based on user interest",
+              "Shinjuku": "Brief description",
+              "Akihabara": "Brief description"
+            },
+            "DailyBudget": "$100–$150"
+          }
+        ]
+      }
+
+      Ensure the entire output is a valid JSON object. No markdown. No text outside the JSON braces.`
         },
         {
           role: "user",
