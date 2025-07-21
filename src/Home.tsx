@@ -26,9 +26,13 @@ const Home = () => {
     if (!itinerary || !itinerary.Title) return null
 
     return (
-      <Card className="w-full min-h-[150px] p-4">
-        <h1 className="text-2xl">{itinerary.Title}</h1>
-      </Card>
+      <>
+        <h1>{itinerary.Title}</h1>
+        <Card className="w-full min-h-[150px] p-4">
+          <h1 className="text-2xl">{itinerary.Description}</h1>
+        </Card>
+      </>
+      
 )
 
   }
