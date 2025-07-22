@@ -3,6 +3,8 @@ import {Button} from "./components/ui/button"
 import Autocomplete from "react-google-autocomplete"
 import { Input } from "./components/ui/input"
 import  generateItinerary  from "./GenerateItinerary"
+import {motion } from "framer-motion"
+
 
 const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY
 
@@ -23,19 +25,32 @@ const Home = () => {
   }
 
   const returnCards = () => {
-    if (!itinerary || !itinerary.Title) return null
+    if (!itinerary || !itinerary.Title || !Array.isArray(itinerary.Days)) return null
 
     return (
       <>
-        <h1>{itinerary.Title}</h1>
-        <Card className="w-full min-h-[150px] p-4">
-          <h1 className="text-2xl">{itinerary.Days[0].Title}</h1>
-          <p>{itinerary.Days[0].Description}</p>
-        </Card>
-      </>
-      
-)
+        <h1 className="text-3xl font-bold mb-6">{itinerary.Title}</h1>
 
+        {itinerary.Days.map((day: any, index: number) => (
+          <motion.div
+           initial={{opacity: 0, y:30}}
+           animate={{opacity: 1, y:0}}
+           transition={{delay: index * .4, duration: .5}}
+           >
+            <Card>
+              <h2 className="text-xl font-semibold mb-2">{day.Day}</h2>
+              <p>{day.Destinations.join(", ")}</p>
+              
+                {Object.entries(day.MainAttractions).map(([location, description]) => (
+                <p key={location}>{location}:{description as string}</p>
+              ))}
+            </Card>
+            
+          </motion.div>
+        ))}
+      </>
+    )
+      
   }
 
   switch (frame) {
