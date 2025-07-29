@@ -29,15 +29,30 @@ const Home = () => {
 
     return (
       <>
-        <h1 className="text-3xl font-bold mb-6">{itinerary.Title}</h1>
+      
+      <div className="flex space-x-8">
+        <div className="w-1/4 border-2 p-4">
+        <h1>hiii</h1>
+      </div>
+      <div className="border-4 w-full">
+        <div className="flex flex-row p-4 border-2 justify-around">
+        <h1 className="text-3xl text-left font-bold mb-6">{itinerary.Title}</h1>
+        <div className="space-x-4">
+          <Button>Regenerate</Button>
+          <Button>Download PDF</Button>
 
+        </div>
+        
+      </div>
+        <div>
         {itinerary.Days.map((day: any, index: number) => (
           <motion.div
            initial={{opacity: 0, y:30}}
            animate={{opacity: 1, y:0}}
            transition={{delay: index * .4, duration: .5}}
            >
-            <Card>
+            <div className="mb-6">
+              <Card className="p-4">
               <h2 className="text-xl font-semibold mb-2">{day.Day}</h2>
               <p>{day.Destinations.join(", ")}</p>
               
@@ -45,9 +60,20 @@ const Home = () => {
                 <p key={location}>{location}:{description as string}</p>
               ))}
             </Card>
-            
+            </div>
           </motion.div>
         ))}
+      </div>
+      </div>
+      
+
+      
+        
+      
+
+      </div>
+      
+        
       </>
     )
       
@@ -78,25 +104,30 @@ const Home = () => {
 
     case "selectionPage":
       return (
-        <div className="flex flex-col h-screen w-screen items-center p-6">
-        <h1 className="text-5xl px-4 pb-4 text-center">Based on your location selection, here are some recommended itinerary items.</h1>
-        <Card className=" w-[70vw] p-2">
-            <div className="flex space-x-2">
-                 <Input value={prompt} onChange={(e) => setPrompt(e.target.value)} className="w-full" />
-                <Button onClick={async () => {
-                  console.log({prompt})
-                  const result = await generateItinerary(prompt)
-                  console.log(result)
-                  setItinerary(JSON.parse(result))}}>Go</Button>
-            </div>
-        </Card>
-        <div className="w-full h-full flex flex-col justify-around p-24">
-            {returnCards()}
-
-          
-        </div>
+        <>
         
+        <div className="flex flex-col h-screen w-screen">
+            <div className="flex flex-col h-screen w-screen items-center p-6">
+          <h1 className="text-5xl px-4 pb-4 text-center">Based on your location selection, here are some recommended itinerary items.</h1>
+          <Card className=" w-[70vw] p-2">
+              <div className="flex space-x-2">
+                  <Input value={prompt} onChange={(e) => setPrompt(e.target.value)} className="w-full" />
+                  <Button onClick={async () => {
+                    console.log({prompt})
+                    const result = await generateItinerary(prompt)
+                    console.log(result)
+                    setItinerary(JSON.parse(result))}}>Go</Button>
+              </div>
+          </Card>
+          <div className="w-full h-full flex flex-col justify-around p-24">
+              {returnCards()}
+
+          </div>
+          
+          </div>
         </div>
+        </>
+        
       )
 
 }
