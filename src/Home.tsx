@@ -4,6 +4,7 @@ import Autocomplete from "react-google-autocomplete"
 import { Input } from "./components/ui/input"
 import  generateItinerary  from "./GenerateItinerary"
 import {motion } from "framer-motion"
+import Sort  from "./Sort"
 
 import {
   DndContext,
@@ -207,7 +208,7 @@ const renderSelectionPage = () => (
   }
 
   if (frame === "selectionPage") return renderSelectionPage()
-  if (frame === "sortingPage") return renderSortingPage()
+  if (frame === "sortingPage") return <Sort selectedItems={selectedItems}/>
 }
 
 export default Home
