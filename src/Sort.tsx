@@ -60,7 +60,7 @@ import { useEffect, useState } from "react"
 import { Card } from "./components/ui/card"
 import { Button } from "./components/ui/button"
 
-const Sort = ({selectedItems}: {selectedItems: ActivityType[]}) => {
+const Sort = ({selectedItems, setFrame}: {selectedItems: ActivityType[], setFrame: any}) => {
     const [sortedData, setSortedData] = useState<any>(null)
     const [loading, setLoading] = useState(true)
 
@@ -79,32 +79,40 @@ const Sort = ({selectedItems}: {selectedItems: ActivityType[]}) => {
     }
 
         return (
-            <>
-                <div className="flex w-screen h-screen bg-blue-200">
-                    <h1>{sortedData.Title}</h1>
-                    {sortedData.Days.map((day: any, index: any) => (
-                        <div key={index}>
-                            <p>{day.Day}</p>
+            <div className="flex flex-col min-h-screen bg-blue-100 px-4 py-6 justify-center">
+                <h1 className="text-4xl font-bold text-center mb-8">{sortedData.Title}</h1>
 
-                            {day.Schedule.map((activity: any, i: number) => (
-                                <div key={i}>
-                                    <p>{activity.time}</p>
-                                    <p>{activity.title}</p>
-                                    <p>{activity.location}</p>
-                                    <p>{activity.notes}</p>
-                                </div>
-                            ))}
+                {sortedData.Days.map((day: any, index: number) => (
+                <div key={index} className="flex justify-center mb-6">
+                    <Card className="w-full max-w-3xl bg-white shadow-md p-6 rounded-lg">
+                    <h2 className="text-2xl font-semibold mb-4">{day.Day}</h2>
 
+                    <div className="space-y-4">
+                        {day.Schedule.map((activity: any, i: number) => (
+                        <div key={i} className="p-4 bg-orange-50 rounded border">
+                            <p className="text-sm text-gray-600 font-semibold">{activity.time}</p>
+                            <p className="text-lg font-bold">{activity.title}</p>
+                            <p className="text-sm text-gray-700 italic">{activity.location}</p>
+                            <p className="text-sm mt-1">{activity.notes}</p>
                         </div>
-
-                        
-                    ))}
-
+                        ))}
+                    </div>
+                    </Card>
                 </div>
+                ))}
 
+                <div className="flex justify-center mt-10">
+                    <div className="flex space-x-4 w-[60%] justify-center">
+                        <Button className="w-1/2 bg-black text-white" onClick={() => window.print()}>
+                            Download PDF
+                        </Button>
+                        <Button className="w-1/2" onClick={() => setFrame("selectionPage")}>Back</Button>
+                    </div>
+                
+                </div>
+            </div>
+            )
 
-            </>
-        )
         }
 
 

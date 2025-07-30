@@ -5,6 +5,7 @@ import { Input } from "./components/ui/input"
 import  generateItinerary  from "./GenerateItinerary"
 import {motion } from "framer-motion"
 import Sort  from "./Sort"
+import { FaMapMarkedAlt } from "react-icons/fa"
 
 import {
   DndContext,
@@ -76,7 +77,13 @@ const handleDragEnd = (event: DragEndEvent) => {
  const handleGenerate = async () => {
     const result = await generateItinerary(prompt)
     const parsed = JSON.parse(result)
-    setActivities(parsed)
+
+    const filtered = parsed.filter(
+    (newItem: ActivityType) =>
+      !selectedItems.some(existing => existing.title === newItem.title)
+  )
+
+    setActivities(filtered)
     setFrame("selectionPage")
   }
 
@@ -113,65 +120,75 @@ const handleDragEnd = (event: DragEndEvent) => {
 
 
 const renderSelectionPage = () => (
-    <DndContext onDragEnd={handleDragEnd}>
-      <div className="flex flex-col h-screen w-screen items-center p-6">
-        <h1 className="text-5xl px-4 pb-4 text-center">Drag items to your list</h1>
-        <Card className="w-[70vw] p-2 mb-4">
-          <div className="flex space-x-2">
-            <Input
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              className="w-full"
-            />
-            <Button onClick={handleGenerate}>Regenerate</Button>
-          </div>
-        </Card>
+  <DndContext onDragEnd={handleDragEnd}>
+    <div className="flex flex-col min-h-screen w-screen items-center bg-gray-50 p-6">
+      <h1 className="text-5xl font-bold text-center mb-6">Drag items to your list</h1>
 
-        <div className="flex w-full h-full p-6 space-x-6">
-          <DropZone>
-            {selectedItems.map((item) => (
-              <Card key={item.id} className="p-4 mb-2">
-                <h3 className="text-lg font-bold">{item.title}</h3>
-                <p className="text-sm text-gray-600">{item.location}</p>
-                <p className="text-sm">{item.description}</p>
-                
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => handleRemoveFromBucket(item.id)}
-                  className="mt-2"
-                >
-                  Remove
-                </Button>
-              </Card>
-            ))}
-          </DropZone>
-          
+      <Card className="w-[70vw] p-4 mb-6 shadow-md">
+        <div className="flex space-x-4">
+          <Input
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            className="w-full"
+            placeholder="Enter a trip plan..."
+          />
+          <Button onClick={handleGenerate}>Regenerate</Button>
+        </div>
+      </Card>
 
-          <div className="w-2/3 border-2 p-4 rounded-md overflow-y-auto">
-            <h2 className="text-2xl font-semibold mb-4">Suggested Activities</h2>
-            {activities.map((item, index) => (
-              
-              
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.05 }}
+      <div className="flex w-full h-full p-6 gap-6">
+        {/* Bucket List */}
+        <DropZone>
+          {selectedItems.map((item) => (
+            <Card key={item.id} className="p-4 mb-4 shadow-sm">
+              <h3 className="text-lg font-bold">{item.title}</h3>
+              <p className="text-sm text-gray-600">{item.location}</p>
+              <p className="text-sm">{item.description}</p>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => handleRemoveFromBucket(item.id)}
+                className="mt-2"
               >
+                Remove
+              </Button>
+            </Card>
+          ))}
+        </DropZone>
 
-              <div>
-                <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`} target="_blank" rel="noopener noreferrer"></a>
-                <Button variant="outline" size="sm" className="mt-2">Open in Maps</Button>
-              </div>
-                <DraggableActivity item={item} />
-              </motion.div>
-            ))}
-          </div>
+        {/* Suggested Activities */}
+        <div className="w-2/3 border-2 p-4 rounded-md bg-white shadow-inner overflow-y-auto">
+          <h2 className="text-2xl font-semibold mb-6">Suggested Activities</h2>
+
+          {activities.map((item, index) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              className="mb-6"
+            >
+              {/* Map Button Row */}
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-3 p-2 rounded bg-blue-50 hover:bg-blue-100 w-fit mb-2"
+              >
+                <span className="text-sm font-medium text-blue-800">Open in Maps</span>
+                <FaMapMarkedAlt className="text-blue-600 hover:text-blue-800 w-5 h-5" />
+              </a>
+
+              {/* Draggable Item */}
+              <DraggableActivity item={item} />
+            </motion.div>
+          ))}
         </div>
       </div>
-    </DndContext>
+    </div>
+  </DndContext>
 )
+
 
    const renderSortingPage = () => (
     <div className="flex flex-col h-screen w-screen items-center p-6">
@@ -208,7 +225,7 @@ const renderSelectionPage = () => (
   }
 
   if (frame === "selectionPage") return renderSelectionPage()
-  if (frame === "sortingPage") return <Sort selectedItems={selectedItems}/>
+  if (frame === "sortingPage") return <Sort selectedItems={selectedItems} setFrame={setFrame}/>
 }
 
 export default Home
