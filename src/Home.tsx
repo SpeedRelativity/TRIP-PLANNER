@@ -6,6 +6,7 @@ import  generateItinerary  from "./GenerateItinerary"
 import {motion } from "framer-motion"
 import Sort  from "./Sort"
 import { FaMapMarkedAlt } from "react-icons/fa"
+import bg from './assets/bg.png'
 
 import {
   DndContext,
@@ -105,7 +106,7 @@ const handleDragEnd = (event: DragEndEvent) => {
     })
 
     return (
-      <div ref={setNodeRef} className="w-1/3 border-2 p-4 rounded-md overflow-y-auto">
+      <div ref={setNodeRef} className="w-1/3 border-2 p-6 rounded-md overflow-y-auto" style={{backgroundImage: `url(${bg})`, backgroundSize: "fit", opacity: "0.3", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
         <h2 className="text-2xl font-semibold mb-4">Your List</h2>
         {children}
         {selectedItems.length > 0 && (
@@ -121,7 +122,7 @@ const handleDragEnd = (event: DragEndEvent) => {
 
 const renderSelectionPage = () => (
   <DndContext onDragEnd={handleDragEnd}>
-    <div className="flex flex-col min-h-screen w-screen items-center bg-gray-50 p-6">
+    <div className="flex flex-col min-h-screen w-screen items-center bg-gray-50 p-6" >
       <h1 className="text-5xl font-bold text-center mb-6">Drag items to your list</h1>
 
       <Card className="w-[70vw] p-4 mb-6 shadow-md">
