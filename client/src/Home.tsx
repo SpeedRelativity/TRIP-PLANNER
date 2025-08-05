@@ -2,7 +2,7 @@ import { Card } from "./components/ui/card"
 import {Button} from "./components/ui/button"
 import Autocomplete from "react-google-autocomplete"
 import { Input } from "./components/ui/input"
-import  generateItinerary  from "./GenerateItinerary"
+{/*import  generateItinerary  from "./GenerateItinerary"*/}
 import {motion } from "framer-motion"
 import Sort  from "./Sort"
 import { FaMapMarkedAlt } from "react-icons/fa"
