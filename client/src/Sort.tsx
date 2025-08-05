@@ -1,4 +1,4 @@
-
+import { saveTrip } from "./api/tripAPI";
 type ActivityType = {
   id: string
   title: string
@@ -60,7 +60,7 @@ import { useEffect, useState } from "react"
 import { Card } from "./components/ui/card"
 import { Button } from "./components/ui/button"
 
-const Sort = ({selectedItems, setFrame}: {selectedItems: ActivityType[], setFrame: any}) => {
+const Sort = ({selectedItems, setFrame, prompt}: {selectedItems: ActivityType[], setFrame: any, prompt: string}) => {
     const [sortedData, setSortedData] = useState<any>(null)
     const [loading, setLoading] = useState(true)
 
@@ -106,6 +106,7 @@ const Sort = ({selectedItems, setFrame}: {selectedItems: ActivityType[], setFram
                         <Button className="w-1/2 bg-black text-white" onClick={() => window.print()}>
                             Download PDF
                         </Button>
+                        <Button className="w-1/2 bg-black text-white" onClick={() => saveTrip({title: sortedData.Title, prompt, activities: selectedItems, generatedItinerary: JSON.stringify(sortedData)})}>Save Itinerary</Button>
                         <Button className="w-1/2" onClick={() => setFrame("selectionPage")}>Back</Button>
                     </div>
                 
@@ -114,6 +115,8 @@ const Sort = ({selectedItems, setFrame}: {selectedItems: ActivityType[], setFram
             )
 
         }
+
+
 
 
 

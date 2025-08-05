@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { generateItineraryfromPrompt } from "../apis/groqAPI";
+import { generateItineraryfromPrompt } from "../api/groqAPI";
 
 const activitySchema = new mongoose.Schema({
     id: {type: String, required: true},

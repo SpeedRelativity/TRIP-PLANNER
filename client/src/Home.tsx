@@ -7,6 +7,7 @@ import {motion } from "framer-motion"
 import Sort  from "./Sort"
 import { FaMapMarkedAlt } from "react-icons/fa"
 import bg from './assets/bg.png'
+import { generateItinerary  } from "./api/itineraryAPI";
 
 import {
   DndContext,
@@ -32,7 +33,6 @@ const Home = () => {
   const [place, setPlace] = useState(null)
   const [frame, setFrame] = useState("main")
   const [prompt, setPrompt] = useState("3 day trip to Japan")
-  const [itinerary, setItinerary] = useState<any>(null)
   const [activities, setActivities] = useState<ActivityType[]>([])
   const [selectedItems, setSelectedItems] = useState<ActivityType[]>([])
 
@@ -76,16 +76,21 @@ const handleDragEnd = (event: DragEndEvent) => {
 }
 
  const handleGenerate = async () => {
+  console.log("handleGenerate clicked");
+  try {
     const result = await generateItinerary(prompt)
     const parsed = JSON.parse(result)
-
     const filtered = parsed.filter(
     (newItem: ActivityType) =>
       !selectedItems.some(existing => existing.title === newItem.title)
-  )
+  );
+
 
     setActivities(filtered)
     setFrame("selectionPage")
+  } catch(error) {
+    console.error("Error generating itinerary:", error);
+  }  
   }
 
    const handleAddToBucket = (item: ActivityType) => {
@@ -226,7 +231,7 @@ const renderSelectionPage = () => (
   }
 
   if (frame === "selectionPage") return renderSelectionPage()
-  if (frame === "sortingPage") return <Sort selectedItems={selectedItems} setFrame={setFrame}/>
+  if (frame === "sortingPage") return <Sort selectedItems={selectedItems} setFrame={setFrame} prompt={prompt}/>
 }
 
 export default Home
