@@ -8,6 +8,7 @@ import Sort  from "./Sort"
 import { FaMapMarkedAlt } from "react-icons/fa"
 import bg from './assets/bg.png'
 import { generateItinerary  } from "./api/itineraryAPI";
+import TripFeed from "./TripFeed"
 
 import {
   DndContext,
@@ -212,26 +213,42 @@ const renderSelectionPage = () => (
   )
 
   if (frame === "main") {
-    return (
-      <div className="flex flex-col h-screen w-screen justify-center items-center">
-        <h1 className="text-5xl px-4 pb-4 text-center">Where would you like to go?</h1>
-        <Card className="w-[60vw] p-4">
-          <div className="flex space-x-2">
-            <Input
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="3 day trip to Japan..."
-              className="w-full"
-            />
-            <Button onClick={handleGenerate}>Go</Button>
-          </div>
-        </Card>
-      </div>
-    )
-  }
+  return (
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-50 px-4">
+      <h1 className="text-5xl font-bold text-center mb-10">
+        Where would you like to go?
+      </h1>
+
+      <Card className="w-full max-w-xl p-6 space-y-6 shadow-lg">
+        <div className="flex space-x-2">
+          <Input
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="3 day trip to Japan..."
+            className="w-full"
+          />
+          <Button onClick={handleGenerate}>Go</Button>
+        </div>
+
+        <div className="flex items-center justify-center">
+          <div className="border-t border-gray-300 w-full" />
+        </div>
+
+        <div className="text-center">
+          <p className="text-sm text-gray-500 mb-2">or see what others are planning</p>
+          <Button variant="outline" onClick={() => setFrame("tripPage")}>
+            🌍 View Community Trips
+          </Button>
+        </div>
+      </Card>
+    </div>
+  );
+}
+
 
   if (frame === "selectionPage") return renderSelectionPage()
   if (frame === "sortingPage") return <Sort selectedItems={selectedItems} setFrame={setFrame} prompt={prompt}/>
+  if (frame === "tripPage") return <TripFeed setFrame={setFrame} />
 }
 
 export default Home

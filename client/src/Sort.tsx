@@ -1,4 +1,5 @@
 import { saveTrip } from "./api/tripAPI";
+import { fetchSortedPlan } from "./api/sort";
 type ActivityType = {
   id: string
   title: string
@@ -6,54 +7,16 @@ type ActivityType = {
   description: string
 }
 
-const fetchSortedPlan = async ({selectedItems}: {selectedItems: ActivityType[]}) => {
-
-  const prompt = `You are a travel planning assistant. Given a list of activities, sort them into an efficient and logical travel itinerary with a timeline. If enough items are not available, do not split them into multiple days. Aim for 3 items a day. Consider location proximity and activity type. Ensure JSON array is valid. No markdown, no text outside the array. Use the below format as a guideline.
-
-{
-  "Title": "Final Japan Itinerary",
-  "Days": [
-    {
-      "Day": "Day 1",
-      "Schedule": [
-        { "time": "9:00 AM", "title": "Tokyo Skytree Visit", "location": "Tokyo", "notes": "Start the day with a panoramic view." },
-        ...
-      ]
-    },
-    ...
-  ]
-}
-
-Activities:
-${JSON.stringify(selectedItems, null, 2)}
-`
-  const apiKey = import.meta.env.VITE_GROQ_API_KEY
-  const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Authorization": `Bearer ${apiKey}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      model: "llama-3.3-70b-versatile",
-      messages: [
-        {
-          role: "system",
-          content: prompt
-        },
-        {
-          role: "user",
-          content: "Sort this into a travel timeline and return in the same json format."
-        }
-      ]
-    })
-  })
-  const result = await response.json()
-  const parsed = JSON.parse(result.choices[0].message.content)
-  console.log(parsed)
-  return parsed
+const loadSortedPlan = async ({selectedItems}: {selectedItems: ActivityType[]}) => {
+  console.log("Sorting these items:", selectedItems);
   
+    const result = await fetchSortedPlan(selectedItems);
+    return result
+
 }
+
+  
+
 
 
 import { useEffect, useState } from "react"
@@ -66,7 +29,7 @@ const Sort = ({selectedItems, setFrame, prompt}: {selectedItems: ActivityType[],
 
     useEffect(() => {
         const sortNew = async () => {
-            const result = await fetchSortedPlan({selectedItems})
+            const result = await loadSortedPlan({selectedItems})
             
             setSortedData(result)
             setLoading(false)

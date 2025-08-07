@@ -3,8 +3,8 @@ import { getAllTrips, getTripById, createTrip } from '../controllers/tripControl
 
 const router = express.Router();
 
-router.get('/trips', getAllTrips);
-router.get('/trips/:id', getTripById);
-router.post('/trips', createTrip);
+router.get('/', getAllTrips);
+router.get('/:id', getTripById);
+router.post('/', createTrip);
 
 export default router;

@@ -1,9 +1,9 @@
 // used to make requests to the backend
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5001";
+const BASE_URL = "http://localhost:5000";
 
-export const saveTrip = async (trip: {
+const saveTrip = async (trip: {
     title: string;
     prompt: string;
     activities: {
@@ -15,9 +15,24 @@ export const saveTrip = async (trip: {
     generatedItinerary: string;
 }) => {
     try {
-        const response = await axios.post(`${BASE_URL}/save-trip`, trip);
-        return response.data;
+        console.log("Saving trip");
+        const data = await axios.post(`${BASE_URL}/trip`, trip);
+        console.log(data);
+        return data; // saved trip here
     } catch (error) {
         return error
     }
 }
+
+const getAllTrips = async () => {
+    try {
+        console.log("Getting all trips");
+        const data = await axios.get(`${BASE_URL}/trip`);
+        console.log(data);
+        return data.data; // saved trip here
+    } catch (error) {
+        return error
+    }
+}
+
+export { saveTrip, getAllTrips };

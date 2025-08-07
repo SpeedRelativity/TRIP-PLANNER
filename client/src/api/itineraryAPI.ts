@@ -1,13 +1,14 @@
 export const generateItinerary = async (prompt: string) => {
   console.log("Calling backend with prompt:", prompt);
 
-  const response = await fetch("http://localhost:5000/api/itinerary", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ prompt })
-  });
+  const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/itinerary`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ prompt })
+});
+
 
   console.log("Got response object:", response);
 

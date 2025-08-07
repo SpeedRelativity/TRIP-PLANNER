@@ -13,6 +13,9 @@ router.post('/', async (req, res) => {
 
         const itinerary = await generateItineraryfromPrompt(prompt);
         const parsed = JSON.parse(itinerary);
+
+        res.status(200).json(parsed);
+
     } catch (error) {
         console.error('Error generating itinerary:', error);
         res.status(500).json({ error: 'Failed to generate itinerary' });
@@ -20,3 +23,5 @@ router.post('/', async (req, res) => {
 });
 
 export default router;
+
+
