@@ -1,17 +1,41 @@
 import tripRoutes from "./routes/tripRoutes"
 import express from "express"
+import connectDb from "./config/db";
 import dotenv from "dotenv"
+import itineraryRoute from "./routes/itineraryRoute"
+import cors from "cors";
+import sortRoute from "./routes/sortRoute";
+import { all } from "axios";
 dotenv.config();
 
+
+
 const app = express();
-const PORT=process.env.PORT;
+const PORT = parseInt(process.env.PORT || "5000", 10);
+
+
+
+const allowedOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5173";  
+app.use(cors({
+  origin: allowedOrigin,
+  credentials: true
+}));
+
 
 app.use(express.json())
-app.use("/trips", tripRoutes);
+app.use("/trip", tripRoutes);
+app.use('/api/itinerary', itineraryRoute);
+app.use("/api/sort", sortRoute);
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// main function to start server.
+const main = async () => {
+  await connectDb();
+  app.listen(PORT, '0.0.0.0' ,() => console.log(`Server running on port ${PORT}`));
+}
 
 app.get("/", (req, res) => {
   res.send("Trip Planner API is live!");
 });
 
+
+main();

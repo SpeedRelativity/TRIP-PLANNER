@@ -4,6 +4,7 @@ import  Trip from "../models/Trip";
 // When someone POSTs to /trips , we create a new trip.
 export const createTrip = async (req: Request, res: Response) => {
     try{
+        console.log("Creating trip");
         const {title, prompt, activities, generatedItinerary}= req.body;
 
         if(!title || !prompt || !activities || !generatedItinerary){
