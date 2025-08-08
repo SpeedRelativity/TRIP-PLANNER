@@ -112,7 +112,8 @@ const handleDragEnd = (event: DragEndEvent) => {
     })
 
     return (
-      <div ref={setNodeRef} className="w-1/3 border-2 p-6 rounded-md overflow-y-auto" style={{backgroundImage: `url(${bg})`, backgroundSize: "fit", opacity: "0.3", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
+      <div ref={setNodeRef} className="w-1/3 border-2 p-6 rounded-md overflow-y-auto" style={{
+        backgroundImage: `url(${bg})`, backgroundSize: "fit", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
         <h2 className="text-2xl font-semibold mb-4">Your List</h2>
         {children}
         {selectedItems.length > 0 && (
