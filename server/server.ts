@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 
 const allowedOrigin = process.env.CLIENT_ORIGIN?.replace(/\/$/, "") || "http://localhost:5173";
-console.log(allowedOrigin);
+console.log("The origin is : ", allowedOrigin);
 app.use(cors({
   origin: allowedOrigin,
   credentials: true,
