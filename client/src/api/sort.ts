@@ -5,9 +5,11 @@ type ActivityType = {
   description: string
 }
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 export const fetchSortedPlan = async (activities: ActivityType[]) => {
     console.log("sort.ts sent to backend", activities);
-  const res = await fetch("http://localhost:5000/api/sort", {
+  const res = await fetch(`${backendUrl}/api/sort`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ activities })
