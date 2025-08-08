@@ -11,26 +11,20 @@ dotenv.config();
 
 
 const app = express();
+
+const allowedOrigin = process.env.CLIENT_ORIGIN?.replace(/\/$/, "") || "http://localhost:5173";
+
+app.use(cors({
+  origin: allowedOrigin,
+  credentials: true,
+}));
+
+
 const PORT = parseInt(process.env.PORT || "5000", 10);
 
 
 
-const allowedOrigins = [
-  process.env.CLIENT_ORIGIN?.replace(/\/$/, "") || "http://localhost:5173"
-];
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin) return callback(null, true); // allow non-browser tools
-    const cleanedOrigin = origin.replace(/\/$/, "");
-    if (allowedOrigins.includes(cleanedOrigin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS not allowed for origin: " + origin));
-    }
-  },
-  credentials: true
-}));
 
 app.use(express.json())
 app.use("/trip", tripRoutes);
