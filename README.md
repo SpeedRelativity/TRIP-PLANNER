@@ -40,9 +40,10 @@ A fullstack travel planning app that uses AI to generate personalized itinerarie
 <!-- Add images to `public/screenshots/` and link here -->
 
 <p align="center">
-  <img src="./public/screenshots/main.png" width="600" />
-  <img src="./public/screenshots/selection.png" width="600" />
-  <img src="./public/screenshots/sorted.png" width="600" />
+  <img src="/public/image1.png" width="600" />
+  <img src="/public/image2.png" width="600" />
+  <img src="/public/image3.png" width="600" />
+  <img src="/public/image4.png" width="600" />
 </p>
 
 ---
