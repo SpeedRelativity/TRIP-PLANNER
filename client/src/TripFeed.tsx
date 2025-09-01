@@ -23,10 +23,11 @@ const TripFeed = ({setFrame}: {setFrame: any}) => {
 
     return (
         <>
-        <div className="flex flex-col gap-4">
+        <div className="flex bg-gray-900 p-8 flex-col gap-4">
+            <h1 className="text-white text-4xl font-bold text-center"> All Saved Community Itineraries</h1>
             {trips.map((trip: any) => (
                 
-                <Card key={trip._id} className="flex flex-col gap-4">
+                <Card key={trip._id} className="flex mb-6 flex-col gap-4">
                     <CardHeader>
                         <CardTitle>{trip.title}</CardTitle>
                         <CardDescription>{trip.prompt}</CardDescription>
@@ -37,7 +38,7 @@ const TripFeed = ({setFrame}: {setFrame: any}) => {
                             const itinerary = JSON.parse(trip.generatedItinerary);
 
                             return itinerary.Days?.map((day: any, index: number) => (
-                                <div key={index} className="mb-4 border rounded p-4 bg-orange-50">
+                                <div key={index} className="mb-4 border rounded p-4 bg-slate-100">
                                 <h3 className="text-xl font-bold mb-2">{day.Day}</h3>
                                 <div className="space-y-2">
                                     {day.Schedule.map((item: any, i: number) => (

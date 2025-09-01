@@ -112,7 +112,7 @@ const handleDragEnd = (event: DragEndEvent) => {
     })
 
     return (
-      <div ref={setNodeRef} className="w-1/3 border-2 p-6 rounded-md overflow-y-auto" style={{
+      <div ref={setNodeRef} className="w-1/3 bg-white border-2 p-6 rounded-md overflow-y-auto" style={{
         backgroundImage: `url(${bg})`, backgroundSize: "fit", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
         <h2 className="text-2xl font-semibold mb-4">Your List</h2>
         {children}
@@ -129,8 +129,8 @@ const handleDragEnd = (event: DragEndEvent) => {
 
 const renderSelectionPage = () => (
   <DndContext onDragEnd={handleDragEnd}>
-    <div className="flex flex-col min-h-screen w-screen items-center bg-gray-50 p-6" >
-      <h1 className="text-5xl font-bold text-center mb-6">Drag items to your list</h1>
+    <div className="flex flex-col min-h-screen w-screen items-center bg-gray-900 p-6" >
+      <h1 className="text-5xl text-white font-bold text-center mb-6">Drag items to your list</h1>
 
       <Card className="w-[70vw] p-4 mb-6 shadow-md">
         <div className="flex space-x-4">
@@ -148,7 +148,7 @@ const renderSelectionPage = () => (
         {/* Bucket List */}
         <DropZone>
           {selectedItems.map((item) => (
-            <Card key={item.id} className="p-4 mb-4 shadow-sm">
+            <Card key={item.id} className="p-4 mb-4 inset-shadow-xs shadow-black ">
               <h3 className="text-lg font-bold">{item.title}</h3>
               <p className="text-sm text-gray-600">{item.location}</p>
               <p className="text-sm">{item.description}</p>
@@ -174,21 +174,21 @@ const renderSelectionPage = () => (
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              className="mb-6"
+              className="mb-4"
             >
               {/* Map Button Row */}
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center space-x-3 p-2 rounded bg-blue-50 hover:bg-blue-100 w-fit mb-2"
+                className="flex items-center space-x-3 p-2 rounded bg-blue-100  hover:bg-blue-100 w-fit mb-2"
               >
                 <span className="text-sm font-medium text-blue-800">Open in Maps</span>
                 <FaMapMarkedAlt className="text-blue-600 hover:text-blue-800 w-5 h-5" />
               </a>
 
               {/* Draggable Item */}
-              <DraggableActivity item={item} />
+              <DraggableActivity  item={item} />
             </motion.div>
           ))}
         </div>
@@ -215,13 +215,13 @@ const renderSelectionPage = () => (
 
   if (frame === "main") {
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-50 px-4">
-      <h1 className="text-5xl font-bold text-center mb-10">
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-900 px-4">
+      <h1 className="text-5xl font-bold text-center text-white mb-10">
         Where would you like to go?
       </h1>
 
-      <Card className="w-full max-w-xl p-6 space-y-6 shadow-lg">
-        <div className="flex space-x-2">
+      <Card className="w-full max-w-[50vw] p-8 space-y-6 shadow-lg">
+        <div className="flex space-x-4">
           <Input
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
