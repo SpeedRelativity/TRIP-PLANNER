@@ -25,6 +25,11 @@ const TripFeed = ({setFrame}: {setFrame: any}) => {
         <>
         <div className="flex bg-gray-900 p-8 flex-col gap-4">
             <h1 className="text-white text-4xl font-bold text-center"> All Saved Community Itineraries</h1>
+            
+            <div className="flex flex-col justify-center text-xl">
+                <p className="text-white text-center"> Empty sections means not enough items added to bucket. </p>
+                <Button className="text-xl bg-blue-400 m-4 w-auto self-center" onClick={() => setFrame("main")}> Back to Planner </Button>
+            </div>
             {trips.map((trip: any) => (
                 
                 <Card key={trip._id} className="flex mb-6 flex-col gap-4">
@@ -56,15 +61,11 @@ const TripFeed = ({setFrame}: {setFrame: any}) => {
                             }
                         })()}
                         </CardContent>
-                    <CardFooter>
-                        <Button onClick={() => setFrame(trip)}>View Trip</Button>
-                    </CardFooter>
+                    
                 </Card>
             ))}          
         </div>
-        <div>
-            <Button onClick={() => setFrame("main")}> Back to Planner </Button>
-        </div>
+        
         </>
 
     )
