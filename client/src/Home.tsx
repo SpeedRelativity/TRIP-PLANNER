@@ -1,206 +1,226 @@
-import { Card } from "./components/ui/card"
-import {Button} from "./components/ui/button"
-import Autocomplete from "react-google-autocomplete"
-import { Input } from "./components/ui/input"
-{/*import  generateItinerary  from "./GenerateItinerary"*/}
-import {motion } from "framer-motion"
-import Sort  from "./Sort"
-import { FaMapMarkedAlt } from "react-icons/fa"
-import bg from './assets/bg.png'
-import { generateItinerary  } from "./api/itineraryAPI";
-import TripFeed from "./TripFeed"
+import { Card } from "./components/ui/card";
+import { Button } from "./components/ui/button";
+import Autocomplete from "react-google-autocomplete";
+import { Input } from "./components/ui/input";
+{
+  /*import  generateItinerary  from "./GenerateItinerary"*/
+}
+import { motion } from "framer-motion";
+import Sort from "./Sort";
+import { FaMapMarkedAlt } from "react-icons/fa";
+import bg from "./assets/bg.png";
+import { generateItinerary } from "./api/itineraryAPI";
+import TripFeed from "./TripFeed";
 
-import {
-  DndContext,
-  useDraggable,
-  useDroppable,
-} from "@dnd-kit/core"
+import { DndContext, useDraggable, useDroppable } from "@dnd-kit/core";
 
-import type { DragEndEvent } from "@dnd-kit/core"
+import type { DragEndEvent } from "@dnd-kit/core";
 
+const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 
-const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY
-
-import { useState } from "react"
+import { useState } from "react";
 
 type ActivityType = {
-  id: string,
-  title: string,
-  location: string,
-  description: string
-}
+  id: string;
+  title: string;
+  location: string;
+  description: string;
+};
 const Home = () => {
+  const [place, setPlace] = useState(null);
+  const [frame, setFrame] = useState("main");
+  const [prompt, setPrompt] = useState("3 day trip to Japan");
+  const [activities, setActivities] = useState<ActivityType[]>([]);
+  const [selectedItems, setSelectedItems] = useState<ActivityType[]>([]);
 
-  const [place, setPlace] = useState(null)
-  const [frame, setFrame] = useState("main")
-  const [prompt, setPrompt] = useState("3 day trip to Japan")
-  const [activities, setActivities] = useState<ActivityType[]>([])
-  const [selectedItems, setSelectedItems] = useState<ActivityType[]>([])
-
-  const DraggableActivity = ({item}: {item: ActivityType}) => {
-    const {attributes, listeners, setNodeRef, transform} = useDraggable({
+  const DraggableActivity = ({ item }: { item: ActivityType }) => {
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({
       id: item.id,
-      data: {item}
-    })
+      data: { item },
+    });
 
     const style = {
-    transform: transform ? `translate(${transform.x}px, ${transform.y}px)` : undefined, zIndex: 999, position: transform ? "absolute":"relative", pointerEvents: "auto" }
+      transform: transform
+        ? `translate(${transform.x}px, ${transform.y}px)`
+        : undefined,
+      zIndex: 999,
+      position: transform ? "absolute" : "relative",
+      pointerEvents: "auto",
+    };
 
-  return (
-    <div ref={setNodeRef}  style={style} {...listeners} {...attributes}>
-      <Card className="p-4 mb-2 cursor-pointer hover:bg-gray-50">
-        <h3 className="text-lg font-bold">{item.title}</h3>
-        <p className="text-sm text-gray-600">{item.location}</p>
-        <p className="text-sm">{item.description}</p>
-      </Card>
-    </div>
-  )
-  }
+    return (
+      <div ref={setNodeRef} style={style} {...listeners} {...attributes}>
+        <Card className="p-4 mb-2 cursor-pointer hover:bg-gray-50">
+          <h3 className="text-lg font-bold">{item.title}</h3>
+          <p className="text-sm text-gray-600">{item.location}</p>
+          <p className="text-sm">{item.description}</p>
+        </Card>
+      </div>
+    );
+  };
 
-const handleDragEnd = (event: DragEndEvent) => {
-    const { over, active } = event
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { over, active } = event;
     if (over?.id === "bucket") {
-      const item = active.data.current?.item
+      const item = active.data.current?.item;
       if (item) {
-        handleRemoveFromSuggested(item.id)
-        handleAddToBucket(item)
-      } 
+        handleRemoveFromSuggested(item.id);
+        handleAddToBucket(item);
+      }
     }
-  }
+  };
 
   const handlePlaceSelect = (selectPlace: any) => {
-    setPlace(selectPlace)
-  }
+    setPlace(selectPlace);
+  };
 
- const handleRemoveFromSuggested = (id: string) => {
-  setActivities((prev) => prev.filter((item) => item.id !== id))
-}
+  const handleRemoveFromSuggested = (id: string) => {
+    setActivities((prev) => prev.filter((item) => item.id !== id));
+  };
 
- const handleGenerate = async () => {
-  console.log("handleGenerate clicked");
-  try {
-    const result = await generateItinerary(prompt)
-    const parsed = JSON.parse(result)
-    const filtered = parsed.filter(
-    (newItem: ActivityType) =>
-      !selectedItems.some(existing => existing.title === newItem.title)
-  );
+  const handleGenerate = async () => {
+    console.log("handleGenerate clicked");
+    try {
+      const result = await generateItinerary(prompt);
+      const parsed = JSON.parse(result);
+      const filtered = parsed.filter(
+        (newItem: ActivityType) =>
+          !selectedItems.some((existing) => existing.title === newItem.title)
+      );
 
-
-    setActivities(filtered)
-    setFrame("selectionPage")
-  } catch(error) {
-    console.error("Error generating itinerary:", error);
-  }  
-  }
-
-   const handleAddToBucket = (item: ActivityType) => {
-    if (!selectedItems.find((i) => i.id === item.id)) {
-      setSelectedItems([...selectedItems, item])
+      setActivities(filtered);
+      setFrame("selectionPage");
+    } catch (error) {
+      console.error("Error generating itinerary:", error);
     }
-  }
+  };
+
+  const handleAddToBucket = (item: ActivityType) => {
+    if (!selectedItems.find((i) => i.id === item.id)) {
+      setSelectedItems([...selectedItems, item]);
+    }
+  };
 
   const handleRemoveFromBucket = (id: string) => {
-    setSelectedItems(selectedItems.filter((item) => item.id !== id))
-  }
-
-
+    setSelectedItems(selectedItems.filter((item) => item.id !== id));
+  };
 
   const DropZone = ({ children }: { children: React.ReactNode }) => {
     const { setNodeRef } = useDroppable({
-      id: "bucket"
-    })
+      id: "bucket",
+    });
 
     return (
-      <div ref={setNodeRef} className="w-1/3 bg-white border-2 p-6 rounded-md overflow-y-auto" style={{
-        backgroundImage: `url(${bg})`, backgroundSize: "fit", backgroundRepeat: "no-repeat", backgroundPosition: "center"}}>
+      <div
+        ref={setNodeRef}
+        className="w-1/3 bg-white border-2 p-6 rounded-md overflow-y-auto"
+        style={{
+          backgroundImage: `url(${bg})`,
+          backgroundSize: "fit",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
+      >
         <h2 className="text-2xl font-semibold mb-4">Your List</h2>
         {children}
         {selectedItems.length > 0 && (
-          <Button className="mt-4 w-full" onClick={() => setFrame("sortingPage")}>
+          <Button
+            className="mt-4 w-full"
+            onClick={() => setFrame("sortingPage")}
+          >
             Next: Sort with AI
           </Button>
         )}
       </div>
-    )
-  }
+    );
+  };
 
+  const renderSelectionPage = () => (
+    <DndContext onDragEnd={handleDragEnd}>
+      <div className="flex flex-col min-h-screen w-screen items-center bg-gray-900 p-6">
+        <h1 className="text-5xl text-white font-bold text-center mb-6">
+          Drag items to your list
+        </h1>
 
+        <Card className="w-[70vw] p-4 mb-6 shadow-md">
+          <div className="flex space-x-4">
+            <Input
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              className="w-full"
+              placeholder="Enter a trip plan..."
+            />
+            <Button onClick={handleGenerate}>Regenerate</Button>
+          </div>
+        </Card>
 
-const renderSelectionPage = () => (
-  <DndContext onDragEnd={handleDragEnd}>
-    <div className="flex flex-col min-h-screen w-screen items-center bg-gray-900 p-6" >
-      <h1 className="text-5xl text-white font-bold text-center mb-6">Drag items to your list</h1>
-
-      <Card className="w-[70vw] p-4 mb-6 shadow-md">
-        <div className="flex space-x-4">
-          <Input
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            className="w-full"
-            placeholder="Enter a trip plan..."
-          />
-          <Button onClick={handleGenerate}>Regenerate</Button>
-        </div>
-      </Card>
-
-      <div className="flex w-full h-full p-6 gap-6">
-        {/* Bucket List */}
-        <DropZone>
-          {selectedItems.map((item) => (
-            <Card key={item.id} className="p-4 mb-4 inset-shadow-xs shadow-black ">
-              <h3 className="text-lg font-bold">{item.title}</h3>
-              <p className="text-sm text-gray-600">{item.location}</p>
-              <p className="text-sm">{item.description}</p>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => handleRemoveFromBucket(item.id)}
-                className="mt-2"
+        <div className="flex w-full h-full p-6 gap-6">
+          {/* Bucket List */}
+          <DropZone>
+            {selectedItems.map((item) => (
+              <Card
+                key={item.id}
+                className="p-4 mb-4 inset-shadow-xs shadow-black "
               >
-                Remove
-              </Button>
-            </Card>
-          ))}
-        </DropZone>
+                <h3 className="text-lg font-bold">{item.title}</h3>
+                <p className="text-sm text-gray-600">{item.location}</p>
+                <p className="text-sm">{item.description}</p>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => handleRemoveFromBucket(item.id)}
+                  className="mt-2"
+                >
+                  Remove
+                </Button>
+              </Card>
+            ))}
+          </DropZone>
 
-        {/* Suggested Activities */}
-        <div className="w-2/3 border-2 p-4 rounded-md bg-white shadow-inner overflow-y-auto">
-          <h2 className="text-2xl font-semibold mb-6">Suggested Activities</h2>
+          {/* Suggested Activities */}
+          <div className="w-2/3 border-2 p-4 rounded-md bg-white shadow-inner overflow-y-auto">
+            <h2 className="text-2xl font-semibold mb-6">
+              Suggested Activities
+            </h2>
 
-          {activities.map((item, index) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-              className="mb-4"
-            >
-              {/* Map Button Row */}
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-3 p-2 rounded bg-blue-100  hover:bg-blue-100 w-fit mb-2"
+            {activities.map((item, index) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+                className="mb-4"
               >
-                <span className="text-sm font-medium text-blue-800">Open in Maps</span>
-                <FaMapMarkedAlt className="text-blue-600 hover:text-blue-800 w-5 h-5" />
-              </a>
+                {/* Map Button Row */}
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                    item.title
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center space-x-3 p-2 rounded bg-blue-100  hover:bg-blue-100 w-fit mb-2"
+                >
+                  <span className="text-sm font-medium text-blue-800">
+                    Open in Maps
+                  </span>
+                  <FaMapMarkedAlt className="text-blue-600 hover:text-blue-800 w-5 h-5" />
+                </a>
 
-              {/* Draggable Item */}
-              <DraggableActivity  item={item} />
-            </motion.div>
-          ))}
+                {/* Draggable Item */}
+                <DraggableActivity item={item} />
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
-  </DndContext>
-)
+    </DndContext>
+  );
 
-
-   const renderSortingPage = () => (
+  const renderSortingPage = () => (
     <div className="flex flex-col h-screen w-screen items-center p-6">
-      <h1 className="text-5xl px-4 pb-4 text-center">Final Sorted Plan (Coming Soon)</h1>
+      <h1 className="text-5xl px-4 pb-4 text-center">
+        Final Sorted Plan (Coming Soon)
+      </h1>
       <div className="w-[70vw]">
         {selectedItems.map((item) => (
           <Card key={item.id} className="p-4 mb-2">
@@ -211,45 +231,52 @@ const renderSelectionPage = () => (
         ))}
       </div>
     </div>
-  )
+  );
 
   if (frame === "main") {
-  return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-900 px-4">
-      <h1 className="text-5xl font-bold text-center text-white mb-10">
-        Where would you like to go?
-      </h1>
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-900 px-4">
+        <h1 className="text-5xl font-bold text-center text-white mb-10">
+          Where would you like to go?
+        </h1>
+        <h2 className="text-2xl font-bold text-center text-white mb-10">
+          please wait for backend to load (~20 seconds) *free server*
+        </h2>
 
-      <Card className="w-full max-w-[50vw] p-8 space-y-6 shadow-lg">
-        <div className="flex space-x-4">
-          <Input
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="3 day trip to Japan..."
-            className="w-full"
-          />
-          <Button onClick={handleGenerate}>Go</Button>
-        </div>
+        <Card className="w-full max-w-[50vw] p-8 space-y-6 shadow-lg">
+          <div className="flex space-x-4">
+            <Input
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="3 day trip to Japan..."
+              className="w-full"
+            />
+            <Button onClick={handleGenerate}>Go</Button>
+          </div>
 
-        <div className="flex items-center justify-center">
-          <div className="border-t border-gray-300 w-full" />
-        </div>
+          <div className="flex items-center justify-center">
+            <div className="border-t border-gray-300 w-full" />
+          </div>
 
-        <div className="text-center">
-          <p className="text-sm text-gray-500 mb-2">or see what others are planning</p>
-          <Button variant="outline" onClick={() => setFrame("tripPage")}>
-            🌍 View Community Trips
-          </Button>
-        </div>
-      </Card>
-    </div>
-  );
-}
+          <div className="text-center">
+            <p className="text-sm text-gray-500 mb-2">
+              or see what others are planning
+            </p>
+            <Button variant="outline" onClick={() => setFrame("tripPage")}>
+              🌍 View Community Trips
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
+  if (frame === "selectionPage") return renderSelectionPage();
+  if (frame === "sortingPage")
+    return (
+      <Sort selectedItems={selectedItems} setFrame={setFrame} prompt={prompt} />
+    );
+  if (frame === "tripPage") return <TripFeed setFrame={setFrame} />;
+};
 
-  if (frame === "selectionPage") return renderSelectionPage()
-  if (frame === "sortingPage") return <Sort selectedItems={selectedItems} setFrame={setFrame} prompt={prompt}/>
-  if (frame === "tripPage") return <TripFeed setFrame={setFrame} />
-}
-
-export default Home
+export default Home;
